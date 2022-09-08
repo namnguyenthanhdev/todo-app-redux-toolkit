@@ -1,8 +1,31 @@
 import { Col, Row, Input, Typography, Radio, Select, Tag } from 'antd';
+import {useState} from "react";
+import {useDispatch} from "react-redux";
+import {filtersSlice} from "./filtersSlice";
 
 const { Search } = Input;
 
 export default function Filters() {
+  const [searchText, setSearchText] = useState("");
+  const [status, setStatus] = useState("All");
+  const [priorities, setPriorities] = useState([]);
+  const action = filtersSlice.actions;
+
+  const dispatch = useDispatch();
+
+  const handleSearchTextInput = (e) => {
+    setSearchText(e.target.value);
+    dispatch(action.searchFilter(e.target.value));
+  }
+  const handleStatusSelect = (e) => {
+    setStatus(e.target.value);
+    dispatch(action.statusFilter(e.target.value));
+  }
+  const handlePrioritiesSelect = (value) => {
+    setPriorities(value);
+    dispatch(action.priorityFilter(value));
+  }
+
   return (
     <Row justify='center'>
       <Col span={24}>
@@ -11,7 +34,11 @@ export default function Filters() {
         >
           Search
         </Typography.Paragraph>
-        <Search placeholder='input search text' />
+        <Search
+            value={searchText}
+            onChange={handleSearchTextInput}
+            placeholder='input search text'
+        />
       </Col>
       <Col sm={24}>
         <Typography.Paragraph
@@ -19,7 +46,7 @@ export default function Filters() {
         >
           Filter By Status
         </Typography.Paragraph>
-        <Radio.Group>
+        <Radio.Group value={status} onChange={handleStatusSelect}>
           <Radio value='All'>All</Radio>
           <Radio value='Completed'>Completed</Radio>
           <Radio value='Todo'>To do</Radio>
@@ -32,6 +59,8 @@ export default function Filters() {
           Filter By Priority
         </Typography.Paragraph>
         <Select
+            value={priorities}
+            onChange={handlePrioritiesSelect}
           mode='multiple'
           allowClear
           placeholder='Please select'

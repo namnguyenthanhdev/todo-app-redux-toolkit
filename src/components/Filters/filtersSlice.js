@@ -1,14 +1,21 @@
-const initState = {
-    search:"",
-    status:"All",
-    priority: "Medium",
-}
+import {createSlice} from "@reduxjs/toolkit";
 
-function todoListSlice (state = initState, action) {
-    switch (action.type) {
-        default:
-            return state;
+
+export const filtersSlice = createSlice({
+    name: "filters",
+    initialState: {
+        search: "", status: "All", priorities: [],
+    },
+    reducers: {
+        searchFilter: (state, action) => {
+            state.search = action.payload;
+        },
+        statusFilter: (state, action) => {
+            state.status = action.payload;
+        },
+        prioritiesFilter: (state, action) => {
+            state.priorities = action.payload;
+        }
     }
-}
+})
 
-export default todoListSlice;

@@ -1,21 +1,28 @@
 import { Col, Row, Input, Button, Select, Tag } from 'antd';
 import Todo from '../Todo';
-import {useState} from "react";
-import {useDispatch} from "react-redux";
-import {addTodo} from "../../redux/actions";
-import {v4 as uuidv4} from "uuid";
+import {useRef, useState} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {todoListSlice} from "./todoListSlice";
+import {v4 as uuid4} from "uuid";
+import {todosRemainingSelector} from "../../redux/selectors";
 
 
 export default function TodoList() {
   const [todoName, setTodoName] = useState("");
   const [priority, setPriority] = useState("Medium");
-
+  const todoList = useSelector(todosRemainingSelector);
+  const todoInputRef = useRef();
   const dispatch = useDispatch();
 
   const handleSubmit = (e) => {
-    dispatch(addTodo({
-      id: uuidv4(), text: 'Learn React', completed: true, priority: 'High'
+    dispatch(
+        todoListSlice.actions.addTodo ({
+      id: uuid4(), text: todoName, completed: false, priority: priority
     }))
+
+    setTodoName("");
+    setPriority("Medium");
+    todoInputRef.current.focus();
   }
   const handleInputNameChange = (e) => {
     setTodoName(e.target.value);
@@ -26,13 +33,23 @@ export default function TodoList() {
   return (
     <Row style={{ height: 'calc(100% - 40px)' }}>
       <Col span={24} style={{ height: 'calc(100% - 40px)', overflowY: 'auto' }}>
-        <Todo name='Learn React' prioriry='High' />
-        <Todo name='Learn Redux' prioriry='Medium' />
-        <Todo name='Learn JavaScript' prioriry='Low' />
+        {todoList.map((todo) =>
+            <Todo
+                key={todo.id}
+                id={todo.id}
+                name={todo.text}
+                priority={todo.priority}
+                completed={todo.completed}
+            />
+        )}
       </Col>
       <Col span={24}>
         <Input.Group style={{ display: 'flex' }} compact>
-          <Input value={todoName} onChange={handleInputNameChange}/>
+          <Input
+              ref={todoInputRef}
+              value={todoName}
+              onChange={handleInputNameChange}
+          />
           <Select defaultValue="Medium" value={priority} onChange={handlePriorityChange}>
             <Select.Option value='High' label='High'>
               <Tag color='red'>High</Tag>
