@@ -1,4 +1,4 @@
-import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
+import {createAsyncThunk, createSlice, current} from "@reduxjs/toolkit";
 
 
 const todoListSlice = createSlice({
@@ -21,7 +21,15 @@ const todoListSlice = createSlice({
         }).addCase(fetchTodos.fulfilled, (state, action) => {
             state.todos = action.payload;
             state.status = "idle";
+        }).addCase(addNewTodo.fulfilled, (state, action) => {
+            state.todos.push(action.payload);
         })
+        //     .addCase(updateTodo.fulfilled, (state, action) => {
+        //    let currentTodo = state.todos.find((todo) => {todo.id === action.payload});
+        //    if(currentTodo) {
+        //        currentTodo = action.payload;
+        //    }
+        // });
     }
 
 })
@@ -31,6 +39,27 @@ export const fetchTodos = createAsyncThunk("todos/fetchTodos", async () => {
     console.log({res});
     const data = await res.json();
     console.log({data});
+    return data.todos;
+});
+
+export const addNewTodo = createAsyncThunk("/api/todos", async (newTodo) => {
+    const res = await fetch("/api/todos", {
+        method: "POST",
+        body: JSON.stringify(newTodo)
+    });
+    const data = await res.json();
+    console.log("dataAfterAddNew: ",{data});
+    return data.todos;
+})
+
+
+export const updateTodo = createAsyncThunk("/api/todos", async (updatedTodo) => {
+    const res = await fetch("/api/updateTodo", {
+        method: "POST",
+        body: JSON.stringify(updatedTodo)
+    });
+    const data = await res.json();
+    console.log("dataAfterUpdate: ",{data});
     return data.todos;
 })
 

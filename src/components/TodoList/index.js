@@ -2,7 +2,7 @@ import {Button, Col, Input, Row, Select, Tag} from 'antd';
 import Todo from '../Todo';
 import {useRef, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import todoListSlice from "./todoListSlice";
+import todoListSlice, {addNewTodo} from "./todoListSlice";
 import {v4 as uuid4} from "uuid";
 import {todosRemainingSelector} from "../../redux/selectors";
 
@@ -15,20 +15,23 @@ export default function TodoList() {
     const dispatch = useDispatch();
 
     const handleSubmit = (e) => {
-        dispatch(
-            todoListSlice.actions.addTodo({
-                id: uuid4(), text: todoName, completed: false, priority: priority
-            }))
+        // dispatch(
+        //     todoListSlice.actions.addTodo({
+        //         id: uuid4(), text: todoName, completed: false, priority: priority
+        //     }))
+        //
+        // setTodoName("");
+        // setPriority("Medium");
+        // todoInputRef.current.focus();
 
+        dispatch(
+            addNewTodo({
+                id: uuid4(), text: todoName, completed: false, priority: priority
+            })
+        );
         setTodoName("");
         setPriority("Medium");
         todoInputRef.current.focus();
-
-        // dispatch(
-        //     addTodos({
-        //         id: uuid4(), text: todoName, completed: false, priority: priority
-        //     })
-        // )
     }
     const handleInputNameChange = (e) => {
         setTodoName(e.target.value);
