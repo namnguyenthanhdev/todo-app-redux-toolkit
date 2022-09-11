@@ -14,12 +14,12 @@ export const todosRemainingSelector = createSelector(
     (todoList, search, priorities, status) => {
          return todoList.filter(todo => {
             if (status === "All") {
-                return priorities.length ? todo.text.includes(search) && todo.priority.includes(priorities) : todo.text.includes(search)
+                return priorities.length ? todo.text.includes(search) && priorities.includes(todo.priority) : todo.text.includes(search)
             }
             return (
                 todo.text.includes(search) &&
                 (status === "Completed" ? todo.completed : !todo.completed) &&
-                (priorities.length ? todo.priority.includes(priorities) : true)
+                (priorities.length ? priorities.includes(todo.priority) : true)
             )
         })
     }

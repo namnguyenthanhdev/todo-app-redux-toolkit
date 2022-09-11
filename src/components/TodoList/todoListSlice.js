@@ -1,7 +1,7 @@
 import {createSlice} from "@reduxjs/toolkit";
 
 
-export const todoListSlice = createSlice({
+const todoListSlice = createSlice({
     name: "todoList",
     initialState: [
             { id: 0, text: 'Learn React', completed: true, priority: 'High' },
@@ -13,8 +13,25 @@ export const todoListSlice = createSlice({
             state.push(action.payload);
         },
         completedToggle: (state, action) => {
-            const currentTodo = state.filter(todo => todo.id === action.payload);
-            currentTodo.completed = !currentTodo.completed;
+            const currentTodo = state.find(todo => todo.id === action.payload);
+            if (currentTodo) {
+                currentTodo.completed = !currentTodo.completed;
+            }
         },
     }
 })
+
+export default todoListSlice;
+
+export function addTodos (todo) {
+    return function addTodosThunk(dispatch, getState){
+        console.log({todo});
+        console.log("addTodosThunk: ", getState());
+        // custom
+        todo.name="Nam em know your vá lù";
+        dispatch(todoListSlice.actions.addTodo(todo));
+        console.log("after addTodosThunk: ", getState());
+
+    }
+
+}

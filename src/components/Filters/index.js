@@ -9,21 +9,20 @@ export default function Filters() {
   const [searchText, setSearchText] = useState("");
   const [status, setStatus] = useState("All");
   const [priorities, setPriorities] = useState([]);
-  const action = filtersSlice.actions;
 
   const dispatch = useDispatch();
 
   const handleSearchTextInput = (e) => {
     setSearchText(e.target.value);
-    dispatch(action.searchFilter(e.target.value));
+    dispatch(filtersSlice.actions.searchFilter(e.target.value));
   }
   const handleStatusSelect = (e) => {
     setStatus(e.target.value);
-    dispatch(action.statusFilter(e.target.value));
+    dispatch(filtersSlice.actions.statusFilter(e.target.value));
   }
   const handlePrioritiesSelect = (value) => {
     setPriorities(value);
-    dispatch(action.priorityFilter(value));
+    dispatch(filtersSlice.actions.prioritiesFilter(value));
   }
 
   return (
