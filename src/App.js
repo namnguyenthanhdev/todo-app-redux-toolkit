@@ -4,6 +4,8 @@ import TodoList from './components/TodoList';
 import Filters from './components/Filters';
 import {useEffect} from "react";
 import {setupServer} from "./API";
+import {fetchTodos} from "./components/TodoList/todoListSlice";
+import {useDispatch} from "react-redux";
 
 if (process.env.NODE_ENV === "development"){
     setupServer();
@@ -12,29 +14,36 @@ if (process.env.NODE_ENV === "development"){
 const { Title } = Typography;
 
 function App() {
+    const dispatch = useDispatch();
     useEffect(() => {
-        fetch("/api/todos", {
-            method: "POST",
-            body: JSON.stringify([
-                { id: 0, text: 'Learn React', completed: true, priority: 'High' },
-            ],)
-        }).then (res => {
-            fetch("/api/todos")
-                .then(res => res.json())
-                .then(res => console.log(res))
-        })
+        dispatch(fetchTodos());
+    }, [])
 
-        fetch("/api/updateTodo", {
-            method: "POST",
-            body: JSON.stringify([
-                { id: 0, text: 'Learn JS', completed: false, priority: 'High' },
-            ],)
-        }).then (res => {
-            fetch("/api/todos")
-                .then(res => res.json())
-                .then(res => console.log(res))
-        })
-    }, []);
+
+
+    // useEffect(() => {
+    //     fetch("/api/todos", {
+    //         method: "POST",
+    //         body: JSON.stringify([
+    //             { id: 0, text: 'Learn React', completed: true, priority: 'High' },
+    //         ],)
+    //     }).then (res => {
+    //         fetch("/api/todos")
+    //             .then(res => res.json())
+    //             .then(res => console.log(res))
+    //     })
+    //
+    //     fetch("/api/updateTodo", {
+    //         method: "POST",
+    //         body: JSON.stringify([
+    //             { id: 0, text: 'Learn JS', completed: false, priority: 'High' },
+    //         ],)
+    //     }).then (res => {
+    //         fetch("/api/todos")
+    //             .then(res => res.json())
+    //             .then(res => console.log(res))
+    //     })
+    // }, []);
   return (
     <div
       style={{
